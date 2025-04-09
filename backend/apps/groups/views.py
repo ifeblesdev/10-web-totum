@@ -5,6 +5,6 @@ from .serializers import GroupSerializer
 
 # Create your views here.
 class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
+    queryset = Group.objects.all().order_by('description')
     serializer_class = GroupSerializer
 
