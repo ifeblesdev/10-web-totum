@@ -35,3 +35,13 @@ food_beverages/  # Carpeta raíz del proyecto
 │
 │── docker-compose.yml  # Configuración para Docker
 │── README.md  # Documentación del proyecto
+
+
+. Ejecutar backend
+python manage.py runserver
+
+. Crear Application
+python manage.py startapp clients apps/clients
+
+. Ver app clients en backend
+http://localhost:8000/api/clients/
