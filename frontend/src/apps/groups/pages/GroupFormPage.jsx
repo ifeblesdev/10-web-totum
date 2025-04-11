@@ -70,6 +70,7 @@ export function GroupFormPage() {
         <input
           type="text"
           placeholder="Description"
+          title="Escriba la descripción del grupo"
           {...register("description", { required: true })}
           className="bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
         />
@@ -82,6 +83,7 @@ export function GroupFormPage() {
           <input
             id="accompaniment"
             type="checkbox"
+            title="Marque si es un acompañamiento y/o contorno"
             {...register("accompaniment")}
             className="mr-2 cursor-pointer"
           />
@@ -95,11 +97,12 @@ export function GroupFormPage() {
           <input
             id="same_screen"
             type="checkbox"
+            title="Escriba si permanece en la misma pantalla al ser seleccionado"
             {...register("same_screen")}
             className="mr-2 cursor-pointer"
           />
           <label htmlFor="same_screen" className="text-black cursor-pointer">
-            Pantalla Igual
+            Misma pantalla
           </label>
         </div>
 
@@ -108,12 +111,13 @@ export function GroupFormPage() {
           <input
             id="show_order"
             type="checkbox"
+            title="Escriba si se muestra en la orden al ser seleccionado"
             {...register("show_order")}
             defaultChecked={true}
             className="mr-2 cursor-pointer"
           />
           <label htmlFor="show_order" className="text-black cursor-pointer">
-            Mostrar Orden
+            Mostrar orden
           </label>
         </div>
 
@@ -122,6 +126,7 @@ export function GroupFormPage() {
           <input
             id="disable"
             type="checkbox"
+            title="Escriba si el grupo está deshabilitado"
             {...register("disable")}
             className="mr-2 cursor-pointer"
           />

@@ -10,22 +10,19 @@ export function Navigation({ showCreate = true, hideOnRoutes = [] }) {
 
   return (
     <div className="flex justify-between items-center">
-      <Link to="/groups">
+      <Link to="/clients">
         <h2
           className="text-2xl font-bold mb-6 text-center"
-          title="Lista de grupos"
+          title="Lista de clientes"
         >
-          Grupos
+          Clientes
         </h2>
       </Link>
 
       {showCreate && !shouldHideButton && (
-        <Link to="/groups/create">
-          <button
-            className="bg-gray-200 text-black px-3 py-2 rounded-lg hover:bg-gray-300"
-            title="Crear grupo"
-          >
-            Crear Grupo
+        <Link to="/clients/create">
+          <button className="bg-gray-200 text-black px-3 py-2 rounded-lg hover:bg-gray-300" title="Crear cliente">
+            Crear Cliente
           </button>
         </Link>
       )}

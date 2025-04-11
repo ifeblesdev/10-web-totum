@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router-dom";
 
-export default function GroupCard({ group }) {
+export default function clientCard({ client }) {
   const navigate = useNavigate();
 
   return (
     <div className="border p-4 rounded-xl shadow text-center cursor-pointer hover:bg-gray-200">
       <p
         onClick={() => {
-          navigate(`/groups/edit/${group.id}`);
+          navigate(`/clients/${client.id}`);
         }}
-        key={group.id}
+        key={client.id}
       >
-        {group.description}
+        {client.description}
       </p>
     </div>
   );
