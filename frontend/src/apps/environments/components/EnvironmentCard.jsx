@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router-dom";
 
-export default function clientCard({ client }) {
+export default function EnvironmentCard({ environment }) {
   const navigate = useNavigate();
 
   return (
     <div className="border p-4 rounded-xl shadow text-center cursor-pointer hover:bg-gray-200">
       <p
         onClick={() => {
-          navigate(`/clients/${client.id}`);
+          navigate(`/environments/edit/${environment.id}`);
         }}
-        key={client.id}
+        key={environment.id}
       >
-        {client.description}
+        {environment.description}
       </p>
     </div>
   );

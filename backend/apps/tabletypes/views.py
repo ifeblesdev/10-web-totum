@@ -4,6 +4,6 @@ from .models import TableType
 from .serializers import TableTypeSerializer
 
 # Create your views here.
-class TableViewSet(viewsets.ModelViewSet):
+class TableTypeViewSet(viewsets.ModelViewSet):
     queryset = TableType.objects.all()
     serializer_class = TableTypeSerializer
