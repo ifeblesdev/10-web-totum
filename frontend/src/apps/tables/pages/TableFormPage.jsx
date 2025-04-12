@@ -1,8 +1,11 @@
 import { useForm } from "react-hook-form";
 import { createTable, getTable, updatedTable, deleteTable } from "../api/";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { getPrinters } from "../../printers/api";
+import { getEnvironments } from "../../environments/api";
+import { getTableTypes } from "../../tabletypes/api";
 
 export function TableFormPage() {
   const {
@@ -14,6 +17,26 @@ export function TableFormPage() {
 
   const navigate = useNavigate();
   const params = useParams();
+  const [printersRes, setPrinters] = useState([]);
+  const [environmentsRes, setEnvironments] = useState([]);
+  const [tabletypesRes, setTableTypes] = useState([]);
+
+  const translations = {
+    print: "Imprimir",
+    commercial_value: "Valor comercial",
+    service: "Servicio",
+    waiter: "Camarero",
+    takeaway: "Para llevar",
+    vat: "IVA",
+    request_price: "Solicitar precio",
+    commands: "Imprime comandas",
+    surcharge: "Recargo",
+    discount: "Descuento",
+    vat_included: "IVA incluido",
+    budget: "Presupuesto",
+    cash_only: "Solo efectivo",
+    disable: "Deshabilitar",
+  };
 
   const onSubmit = handleSubmit(async (data) => {
     for (let key in data) {
@@ -39,16 +62,67 @@ export function TableFormPage() {
   });
 
   useEffect(() => {
-    async function loadTable() {
-      if (params.id) {
-        const { data } = await getTable(params.id);
-        for (let key in data) {
-          if (data[key] !== null) setValue(key, data[key]);
-        }
+    async function loadData() {
+      try {
+        // Llamadas a API (ajustá los endpoints según tu backend)
+        const { data: printersRes } = await getPrinters();
+        const { data: environmentsRes } = await getEnvironments();
+        const { data: tabletypesRes } = await getTableTypes();
+        setPrinters(printersRes);
+        setEnvironments(environmentsRes);
+        setTableTypes(tabletypesRes);
+        // console.log("Printers:", printersRes);
+        // console.log("Environments:", environmentsRes);
+        // console.log("Table Types:", tabletypesRes);
+      } catch (error) {
+        toast.error("Error al cargar datos relacionados");
       }
     }
-    loadTable();
+    loadData();
   }, []);
+
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const { environmentsRes } = await getEnvironments();
+        const { printersRes } = await getPrinters();
+        const { tabletypesRes } = await getTableTypes();
+        setEnvironments(environmentsRes);
+        setPrinters(printersRes);
+        setTableTypes(tabletypesRes);
+        console.log(environmentsRes)
+
+        if (params.id) {
+          const { data } = await getTable(params.id);
+          console.log(data)
+
+          for (let key in data) {
+            if (data[key] !== null) {
+              setValue(key, data[key]);
+            }
+          }
+
+          if (data.environment) {
+            setValue("environment", data.environment); 
+          }
+          if (data.printer_commands1) {
+            setValue("printer_commands1", data.printer_commands1.id);
+          }
+          if (data.printer_commands2) {
+            setValue("printer_commands2", data.printer_commands2.id);
+          }
+          if (data.table_type) {
+            setValue("table_type", data.table_type.id);
+          }
+        }
+      } catch (error) {
+        toast.error("Error al cargar los datos relacionados con la mesa.");
+      }
+    }
+
+    loadData();
+  }, [params.id, setValue]);
 
   return (
     <div className="max-w-xl mx-auto">
@@ -100,19 +174,25 @@ export function TableFormPage() {
               className="mr-2"
             />
             <label htmlFor={field} className="capitalize">
-              {field.replaceAll("_", " ")}
+              {translations[field] || field.replaceAll("_", " ")}
             </label>
           </div>
         ))}
 
-        {/* Selects para FK: puedes poblar estas opciones dinámicamente si querés */}
         <select
           {...register("printer_commands1")}
           className="form-input bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
         >
           <option value="">Selecciona una impresora (1)</option>
-          <option value="1">Impresora 1</option>
-          <option value="2">Impresora 2</option>
+          {printersRes && printersRes.length > 0 ? (
+            printersRes.map((printer) => (
+              <option key={printer.id} value={printer.id}>
+                {printer.description}
+              </option>
+            ))
+          ) : (
+            <option>No hay impresoras disponibles</option>
+          )}
         </select>
 
         <select
@@ -120,8 +200,15 @@ export function TableFormPage() {
           className="form-input bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
         >
           <option value="">Selecciona una impresora (2)</option>
-          <option value="1">Impresora 1</option>
-          <option value="2">Impresora 2</option>
+          {printersRes && printersRes.length > 0 ? (
+            printersRes.map((printer) => (
+              <option key={printer.id} value={printer.id}>
+                {printer.description}
+              </option>
+            ))
+          ) : (
+            <option>No hay impresoras disponibles</option>
+          )}
         </select>
 
         <select
@@ -129,8 +216,15 @@ export function TableFormPage() {
           className="form-input bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
         >
           <option value="">Selecciona un entorno</option>
-          <option value="1">Salón</option>
-          <option value="2">Terraza</option>
+          {environmentsRes && environmentsRes.length > 0 ? (
+            environmentsRes.map((env) => (
+              <option key={env.id} value={env.id}>
+                {env.description}
+              </option>
+            ))
+          ) : (
+            <option>No hay entornos disponibles</option>
+          )}
         </select>
         {errors.environment && (
           <span className="text-red-500">El entorno es obligatorio</span>
@@ -141,10 +235,16 @@ export function TableFormPage() {
           className="form-input bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
         >
           <option value="">Selecciona un tipo de mesa</option>
-          <option value="1">Comedor</option>
-          <option value="2">Barra</option>
+          {tabletypesRes && tabletypesRes.length > 0 ? (
+            tabletypesRes.map((tabletype) => (
+              <option key={tabletype.id} value={tabletype.id}>
+                {tabletype.description}
+              </option>
+            ))
+          ) : (
+            <option>No hay tipos de mesas disponibles</option>
+          )}
         </select>
-
         <button className="bg-indigo-500 text-white p-3 rounded-lg block w-full mt-3 shadow-md hover:bg-indigo-600">
           Guardar
         </button>
