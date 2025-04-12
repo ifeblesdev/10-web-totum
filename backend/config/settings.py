@@ -42,6 +42,11 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.groups',
     'apps.clients',
+    'apps.environments',
+    'apps.printers',
+    'apps.tables',
+    'apps.tabletypes',
+    'apps.waiters',
 ]
 
 MIDDLEWARE = [

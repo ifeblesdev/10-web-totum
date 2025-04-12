@@ -61,7 +61,7 @@ export function GroupFormPage() {
   }, []);
 
   return (
-    <div className="max-w-xl mx-auto flex-container">
+    <div className="max-w-full mx-auto flex-container">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-4xl"

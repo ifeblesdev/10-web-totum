@@ -45,3 +45,7 @@ python manage.py startapp clients apps/clients
 
 . Ver app clients en backend
 http://localhost:8000/api/clients/
+
+. Hacer migraciones
+  python manage.py makemigrations environments printers tables tabletypes waiters
+  python manage.py migrate

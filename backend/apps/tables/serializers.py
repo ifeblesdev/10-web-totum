@@ -1,0 +1,7 @@
+from rest_framework import serializers
+from .models import Table
+
+class PrinterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Table
+        fields = ['id', 'description', 'copies', 'print', 'commercial_value', 'service', 'waiter', 'takeaway','vat', 'request_price', 'commands', 'surcharge', 'discount', 'vat_included', 'budget', 'cash_only', 'disable']  

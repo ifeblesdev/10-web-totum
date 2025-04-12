@@ -9,7 +9,7 @@ export function Navigation({ showCreate = true, hideOnRoutes = [] }) {
   );
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between ">
       <Link to="/groups">
         <h2
           className="text-2xl font-bold mb-6 text-center"
