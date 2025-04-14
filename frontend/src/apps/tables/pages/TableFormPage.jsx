@@ -85,17 +85,15 @@ export function TableFormPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const { environmentsRes } = await getEnvironments();
-        const { printersRes } = await getPrinters();
-        const { tabletypesRes } = await getTableTypes();
+        const { data: environmentsRes } = await getEnvironments();
+        const { data: printersRes } = await getPrinters();
+        const { data: tabletypesRes } = await getTableTypes();
         setEnvironments(environmentsRes);
         setPrinters(printersRes);
         setTableTypes(tabletypesRes);
-        console.log(environmentsRes)
 
         if (params.id) {
           const { data } = await getTable(params.id);
-          console.log(data)
 
           for (let key in data) {
             if (data[key] !== null) {
@@ -107,13 +105,13 @@ export function TableFormPage() {
             setValue("environment", data.environment); 
           }
           if (data.printer_commands1) {
-            setValue("printer_commands1", data.printer_commands1.id);
+            setValue("printer_commands1", data.printer_commands1);
           }
           if (data.printer_commands2) {
-            setValue("printer_commands2", data.printer_commands2.id);
+            setValue("printer_commands2", data.printer_commands2);
           }
           if (data.table_type) {
-            setValue("table_type", data.table_type.id);
+            setValue("table_type", data.table_type);
           }
         }
       } catch (error) {
