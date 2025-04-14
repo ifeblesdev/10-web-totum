@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'apps.tables',
     'apps.tabletypes',
     'apps.waiters',
+    'apps.products',
 ]
 
 MIDDLEWARE = [

@@ -22,6 +22,9 @@ import PrinterList from "./apps/printers/components/PrinterList";
 import { TablesLayout } from "./apps/tables/layouts/TablesLayout";
 import { TableFormPage } from "./apps/tables/pages/TableFormPage";
 import TableList from "./apps/tables/components/TableList";  
+import { ProductsLayout } from "./apps/products/layouts/ProductsLayout";
+import { ProductFormPage } from "./apps/products/pages/ProductFormPage";
+import ProductList from "./apps/products/components/ProductList";  
 import { Toaster } from 'react-hot-toast';
 
 
@@ -72,6 +75,13 @@ function App() {
             <Route index element={<TableList />} />
             <Route path="create" element={<TableFormPage />} />
             <Route path="edit/:id" element={<TableFormPage />} />
+          </Route>
+
+          {/* Products */}
+          <Route path="/products" element={<ProductsLayout />}>
+            <Route index element={<ProductList />} />
+            <Route path="create" element={<ProductFormPage />} />
+            <Route path="edit/:id" element={<ProductFormPage />} />
           </Route>
 
         </Routes>

@@ -61,26 +61,6 @@ export function TableFormPage() {
     navigate("/tables");
   });
 
-  useEffect(() => {
-    async function loadData() {
-      try {
-        // Llamadas a API (ajustá los endpoints según tu backend)
-        const { data: printersRes } = await getPrinters();
-        const { data: environmentsRes } = await getEnvironments();
-        const { data: tabletypesRes } = await getTableTypes();
-        setPrinters(printersRes);
-        setEnvironments(environmentsRes);
-        setTableTypes(tabletypesRes);
-        // console.log("Printers:", printersRes);
-        // console.log("Environments:", environmentsRes);
-        // console.log("Table Types:", tabletypesRes);
-      } catch (error) {
-        toast.error("Error al cargar datos relacionados");
-      }
-    }
-    loadData();
-  }, []);
-
 
   useEffect(() => {
     async function loadData() {
