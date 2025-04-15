@@ -16,6 +16,12 @@ export function GroupFormPage() {
   const params = useParams();
 
   const onSubmit = handleSubmit(async (data) => {
+    for (let key in data) {
+      if (data[key] === "") {
+        data[key] = null;
+      }
+    }    
+    
     if (params.id) {
       await updatedGroup(params.id, data);
       toast.success("Grupo actualizado", {
@@ -157,38 +163,6 @@ export function GroupFormPage() {
         </button>
       </form>
 
-      {/* {params.id && (
-        <div className=" flex justify-end">
-          <button
-            className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48 mt-3 button-delete"
-            onClick={async () => {
-              const accepted = window.confirm("¿Estás seguro?");
-              if (accepted) {
-                try {
-                  await deleteGroup(params.id)
-                  toast.success("Grupo eliminado", {
-                    position: "top-right",
-                    style: {
-                      background: "#101010",
-                      color: "#fff",
-                    },
-                  } catch (error) {   
-                    toast.error(error.message, {                    position: "top-right",
-                      style: {
-                        background: "#101010",
-                        color: "#fff",
-                      },
-                  }
-                }
-                
-                navigate("/groups");
-              }
-            }}
-          >
-            Eliminar
-          </button>
-        </div>
-      )} */}
       {params.id && (
         <div className="flex justify-end">
           <button

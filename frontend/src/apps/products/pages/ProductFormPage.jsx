@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { getPrinters } from "../../printers/api";
 import { getGroups } from "../../groups/api";
+import { getVatRates } from "../../vatrates/api";
 import {
   createProduct,
   getProduct,
@@ -24,15 +25,18 @@ export function ProductFormPage() {
 
   const [groups, setGroups] = useState([]);
   const [printers, setPrinters] = useState([]);
+  const [vatrates, setVatRates] = useState([]);
 
   useEffect(() => {
     async function loadData() {
       try {
         const { data: groupsRes } = await getGroups();
         const { data: printersRes } = await getPrinters();
-
+        const { data: vatratesRes } = await getVatRates();
+        
         setPrinters(printersRes);
         setGroups(groupsRes);
+        setVatRates(vatratesRes);
 
         if (params.id) {
           const { data } = await getProduct(params.id);
@@ -64,9 +68,12 @@ export function ProductFormPage() {
           if (data.printer_commands6) {
             setValue("printer_commands6", data.printer_commands6);
           }
+          if (data.vat_type) {
+            setValue("vat_type", data.vat_type);
+          }
         }
       } catch (error) {
-        toast.error("Error al cargar los datos relacionados con la mesa.");
+        toast.error("Error al cargar los datos relacionados con el producto.");
       }
     }
 
@@ -157,13 +164,32 @@ export function ProductFormPage() {
             )}
           </div>
 
-          <input
+          {/* <input
             type="text"
             placeholder="Tipo de IVA"
             title="Escriba el tipo de IVA del producto"
             {...register("vat_type")}
             className="p-3 rounded-lg border border-gray-300"
-          />
+          /> */}
+
+          {/* Tipo iva */}
+          <div className="flex flex-col">
+            <select
+              title="Selecciona un tipo de IVA"
+              {...register("vat_type", { required: true })}
+              className="p-3 rounded-lg border border-gray-300"
+            >
+              <option value="">Selecciona un tipo de iva</option>
+              {vatrates.map((vatrate) => (
+                <option key={vatrate.id} value={vatrate.id}>
+                  {vatrate.description}
+                </option>
+              ))}
+            </select>
+            {errors.vat_type && (
+              <span className="text-red-500 text-sm mt-1">Tipo iva requerido</span>
+            )}
+          </div>
 
           {/* Precios */}
           <input

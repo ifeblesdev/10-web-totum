@@ -4,36 +4,42 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { Navbar } from "./components/Navbar";
+import { Home } from "./components/Home";
 import { GroupsLayout } from "./apps/groups/layouts/GroupsLayout";
 import { GroupFormPage } from "./apps/groups/pages/GroupFormPage";
-import GroupList from "./apps/groups/components/GroupList";  
+import GroupList from "./apps/groups/components/GroupList";
 import { ClientsLayout } from "./apps/clients/layouts/ClientsLayout";
 import { ClientFormPage } from "./apps/clients/pages/ClientFormPage";
 import ClientList from "./apps/clients/components/ClientList";
 import { TableTypesLayout } from "./apps/tabletypes/layouts/TableTypesLayout";
 import { TableTypeFormPage } from "./apps/tabletypes/pages/TableTypeFormPage";
-import TableTypeList from "./apps/tabletypes/components/TableTypeList";  
+import TableTypeList from "./apps/tabletypes/components/TableTypeList";
 import { EnvironmentsLayout } from "./apps/environments/layouts/EnvironmentsLayout";
 import { EnvironmentFormPage } from "./apps/environments/pages/EnvironmentFormPage";
-import EnvironmentList from "./apps/environments/components/EnvironmentList";  
+import EnvironmentList from "./apps/environments/components/EnvironmentList";
 import { PrintersLayout } from "./apps/printers/layouts/PrintersLayout";
 import { PrinterFormPage } from "./apps/printers/pages/PrinterFormPage";
-import PrinterList from "./apps/printers/components/PrinterList";  
+import PrinterList from "./apps/printers/components/PrinterList";
 import { TablesLayout } from "./apps/tables/layouts/TablesLayout";
 import { TableFormPage } from "./apps/tables/pages/TableFormPage";
-import TableList from "./apps/tables/components/TableList";  
+import TableList from "./apps/tables/components/TableList";
 import { ProductsLayout } from "./apps/products/layouts/ProductsLayout";
 import { ProductFormPage } from "./apps/products/pages/ProductFormPage";
-import ProductList from "./apps/products/components/ProductList";  
-import { Toaster } from 'react-hot-toast';
-
+import ProductList from "./apps/products/components/ProductList";
+import { VatRatesLayout } from "./apps/vatrates/layouts/VatRatesLayout";
+import { VatRateFormPage } from "./apps/vatrates/pages/VatRateFormPage";
+import VatRateList from "./apps/vatrates/components/VatRateList";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <Router>
+      <Navbar />
       <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
         <Routes>
-          {/* <Route path="/" element={<Navigate to="groups" />} /> */}
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
 
           {/* Grupos */}
           <Route path="/groups" element={<GroupsLayout />}>
@@ -84,6 +90,12 @@ function App() {
             <Route path="edit/:id" element={<ProductFormPage />} />
           </Route>
 
+          {/* Vat Rates */}
+          <Route path="/vatrates" element={<VatRatesLayout />}>
+            <Route index element={<VatRateList />} />
+            <Route path="create" element={<VatRateFormPage />} />
+            <Route path="edit/:id" element={<VatRateFormPage />} />
+          </Route>
         </Routes>
         <Toaster />
       </div>

@@ -51,3 +51,12 @@ form {
     }
   }
   
+
+  /* Añadir en tu archivo global de CSS o dentro de Tailwind para el hamburger */
+.hamburger-btn {
+  transition: transform 0.3s ease;
+}
+
+.hamburger-btn.open {
+  transform: rotate(90deg);
+}
