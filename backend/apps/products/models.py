@@ -3,7 +3,7 @@ from django.db import models
 class Product(models.Model):
     code = models.CharField(max_length=50, null=True, blank=True)
     description = models.CharField(max_length=255, null=True, blank=True)
-    group = models.ForeignKey('groups.Group', on_delete=models.CASCADE,related_name='group')
+    group = models.ForeignKey('groups.Group', on_delete=models.PROTECT,related_name='group')
     command_description = models.CharField(max_length=255, null=True, blank=True)
     vat_type = models.CharField(max_length=50, null=True, blank=True)
 
@@ -21,12 +21,12 @@ class Product(models.Model):
     currency_price3 = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     currency_price_with_vat3 = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
-    printer_commands1 = models.ForeignKey('printers.Printer', on_delete=models.CASCADE, related_name='product_printer_commands1', null=True, blank=True)
-    printer_commands2 = models.ForeignKey('printers.Printer', on_delete=models.CASCADE, related_name='product_printer_commands2', null=True, blank=True)
-    printer_commands3 = models.ForeignKey('printers.Printer', on_delete=models.CASCADE, related_name='product_printer_commands3', null=True, blank=True)
-    printer_commands4 = models.ForeignKey('printers.Printer', on_delete=models.CASCADE, related_name='product_printer_commands4', null=True, blank=True)
-    printer_commands5 = models.ForeignKey('printers.Printer', on_delete=models.CASCADE, related_name='product_printer_commands5', null=True, blank=True)
-    printer_commands6 = models.ForeignKey('printers.Printer', on_delete=models.CASCADE, related_name='product_printer_commands6', null=True, blank=True)
+    printer_commands1 = models.ForeignKey('printers.Printer', on_delete=models.PROTECT, related_name='product_printer_commands1', null=True, blank=True)
+    printer_commands2 = models.ForeignKey('printers.Printer', on_delete=models.PROTECT, related_name='product_printer_commands2', null=True, blank=True)
+    printer_commands3 = models.ForeignKey('printers.Printer', on_delete=models.PROTECT, related_name='product_printer_commands3', null=True, blank=True)
+    printer_commands4 = models.ForeignKey('printers.Printer', on_delete=models.PROTECT, related_name='product_printer_commands4', null=True, blank=True)
+    printer_commands5 = models.ForeignKey('printers.Printer', on_delete=models.PROTECT, related_name='product_printer_commands5', null=True, blank=True)
+    printer_commands6 = models.ForeignKey('printers.Printer', on_delete=models.PROTECT, related_name='product_printer_commands6', null=True, blank=True)
 
     ask_quantity = models.BooleanField(default=False)
     ask_price = models.BooleanField(default=False)

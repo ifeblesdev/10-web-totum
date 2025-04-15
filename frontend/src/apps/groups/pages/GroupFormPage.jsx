@@ -87,7 +87,11 @@ export function GroupFormPage() {
             {...register("accompaniment")}
             className="mr-2 cursor-pointer"
           />
-          <label htmlFor="accompaniment" className="text-black cursor-pointer">
+          <label
+            htmlFor="accompaniment"
+            className="text-black cursor-pointer"
+            title="Marque si es un acompañamiento y/o contorno"
+          >
             Acompañamiento
           </label>
         </div>
@@ -97,11 +101,15 @@ export function GroupFormPage() {
           <input
             id="same_screen"
             type="checkbox"
-            title="Escriba si permanece en la misma pantalla al ser seleccionado"
+            title="Marque si permanece en la misma pantalla al ser seleccionado"
             {...register("same_screen")}
             className="mr-2 cursor-pointer"
           />
-          <label htmlFor="same_screen" className="text-black cursor-pointer">
+          <label
+            htmlFor="same_screen"
+            className="text-black cursor-pointer"
+            title="Marque si permanece en la misma pantalla al ser seleccionado"
+          >
             Misma pantalla
           </label>
         </div>
@@ -111,12 +119,16 @@ export function GroupFormPage() {
           <input
             id="show_order"
             type="checkbox"
-            title="Escriba si se muestra en la orden al ser seleccionado"
+            title="Marque si se muestra en la orden al ser seleccionado"
             {...register("show_order")}
             defaultChecked={true}
             className="mr-2 cursor-pointer"
           />
-          <label htmlFor="show_order" className="text-black cursor-pointer">
+          <label
+            htmlFor="show_order"
+            className="text-black cursor-pointer"
+            title="Marque si se muestra en la orden al ser seleccionado"
+          >
             Mostrar orden
           </label>
         </div>
@@ -126,37 +138,83 @@ export function GroupFormPage() {
           <input
             id="disable"
             type="checkbox"
-            title="Escriba si el grupo está deshabilitado"
+            title="Marque si el grupo está deshabilitado"
             {...register("disable")}
             className="mr-2 cursor-pointer"
           />
-          <label htmlFor="disable" className="text-black cursor-pointer">
+          <label
+            htmlFor="disable"
+            className="text-black cursor-pointer"
+            title="Marque si el grupo está deshabilitado"
+          >
             Deshabilitado
           </label>
         </div>
 
         {/* Botón de guardar */}
-        <button className="bg-indigo-500 text-white p-3 rounded-lg block w-full mt-3 shadow-md hover:bg-indigo-600">
+        <button className="bg-indigo-500 text-white p-3 rounded-lg block w-full mt-3 shadow-md hover:bg-indigo-600 cursor-pointer">
           Guardar
         </button>
       </form>
 
-      {params.id && (
+      {/* {params.id && (
         <div className=" flex justify-end">
           <button
             className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48 mt-3 button-delete"
             onClick={async () => {
               const accepted = window.confirm("¿Estás seguro?");
               if (accepted) {
-                await deleteGroup(params.id);
-                toast.success("Grupo eliminado", {
-                  position: "top-right",
-                  style: {
-                    background: "#101010",
-                    color: "#fff",
-                  },
-                });
+                try {
+                  await deleteGroup(params.id)
+                  toast.success("Grupo eliminado", {
+                    position: "top-right",
+                    style: {
+                      background: "#101010",
+                      color: "#fff",
+                    },
+                  } catch (error) {   
+                    toast.error(error.message, {                    position: "top-right",
+                      style: {
+                        background: "#101010",
+                        color: "#fff",
+                      },
+                  }
+                }
+                
                 navigate("/groups");
+              }
+            }}
+          >
+            Eliminar
+          </button>
+        </div>
+      )} */}
+      {params.id && (
+        <div className="flex justify-end">
+          <button
+            className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48 mt-3 button-delete cursor-pointer"
+            onClick={async () => {
+              const accepted = window.confirm("¿Estás seguro?");
+              if (accepted) {
+                try {
+                  await deleteGroup(params.id);
+                  toast.success("Grupo eliminado", {
+                    position: "top-right",
+                    style: {
+                      background: "#101010",
+                      color: "#fff",
+                    },
+                  });
+                  navigate("/groups"); // Solo si se elimina correctamente
+                } catch (error) {
+                  toast.error(error.message, {
+                    position: "top-right",
+                    style: {
+                      background: "#101010",
+                      color: "#fff",
+                    },
+                  });
+                }
               }
             }}
           >
@@ -167,5 +225,3 @@ export function GroupFormPage() {
     </div>
   );
 }
-
-

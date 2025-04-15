@@ -14,6 +14,19 @@ export const createPrinter = (printer) => printersApi.post("/", printer);
 
 export const getPrinter = (id) => printersApi.get(`/${id}/`)
 
-export const deletePrinter = (id) => printersApi.delete(`/${id}/`);
 
 export const updatedPrinter = (id, printer) => printersApi.put(`/${id}/`, printer)
+
+
+export const deletePrinter = async (id) => {
+  try {
+    const response = await printersApi.delete(`/${id}/`);
+    return response;
+  } catch (error) {
+    if (error.response?.data?.detail) {
+      throw new Error(error.response.data.detail);
+    } else {
+      throw new Error("Error al eliminar la impresora.");
+    }
+  }
+};

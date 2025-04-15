@@ -14,6 +14,17 @@ export const createTableType = (tabletype) => tabletypesApi.post("/", tabletype)
 
 export const getTableType = (id) => tabletypesApi.get(`/${id}/`)
 
-export const deleteTableType = (id) => tabletypesApi.delete(`/${id}/`);
-
 export const updatedTableType = (id, tabletype) => tabletypesApi.put(`/${id}/`, tabletype)
+
+export const deleteTableType = async (id) => {
+  try {
+    const response = await tabletypesApi.delete(`/${id}/`);
+    return response;
+  } catch (error) {
+    if (error.response?.data?.detail) {
+      throw new Error(error.response.data.detail);
+    } else {
+      throw new Error("Error al eliminar el tipo de mesa.");
+    }
+  }
+};

@@ -16,6 +16,20 @@ export const createGroup = (group) => groupsApi.post("/", group);
 
 export const getGroup = (id) => groupsApi.get(`/${id}/`)
 
-export const deleteGroup = (id) => groupsApi.delete(`/${id}/`);
 
 export const updatedGroup = (id, group) => groupsApi.put(`/${id}/`, group)
+
+export const deleteGroup = async (id) => {
+  try {
+    const response = await groupsApi.delete(`/${id}/`);
+    return response;
+  } catch (error) {
+    if (error.response?.data?.detail) {
+      // Lanzamos el error para manejarlo donde se llame a deleteGroup
+      throw new Error(error.response.data.detail);
+    } else {
+      throw new Error("Error al eliminar el grupo.");
+    }
+  }
+};
+

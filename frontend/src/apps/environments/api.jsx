@@ -14,6 +14,18 @@ export const createEnvironment = (environment) => environmentsApi.post("/", envi
 
 export const getEnvironment = (id) => environmentsApi.get(`/${id}/`)
 
-export const deleteEnvironment = (id) => environmentsApi.delete(`/${id}/`);
-
 export const updatedEnvironment = (id, environment) => environmentsApi.put(`/${id}/`, environment)
+
+export const deleteEnvironment = async (id) => {
+  try {
+    const response = await environmentsApi.delete(`/${id}/`);
+    return response;
+  } catch (error) {
+    if (error.response?.data?.detail) {
+      throw new Error(error.response.data.detail);
+    } else {
+      throw new Error("Error al eliminar el ambiente.");
+    }
+  }
+};
+

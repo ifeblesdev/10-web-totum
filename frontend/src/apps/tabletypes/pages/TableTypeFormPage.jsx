@@ -1,5 +1,10 @@
 import { useForm } from "react-hook-form";
-import { createTableType, getTableType, updatedTableType, deleteTableType } from "../api/";
+import {
+  createTableType,
+  getTableType,
+  updatedTableType,
+  deleteTableType,
+} from "../api/";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
@@ -42,10 +47,7 @@ export function TableTypeFormPage() {
     async function loadTableType() {
       if (params.id) {
         const {
-          data: {
-            description,
-            disable,
-          },
+          data: { description, disable },
         } = await getTableType(params.id);
         setValue("description", description);
         setValue("disable", disable);
@@ -81,13 +83,13 @@ export function TableTypeFormPage() {
             {...register("disable")}
             className="mr-2 cursor-pointer"
           />
-          <label htmlFor="disable" className="text-black cursor-pointer">
+          <label htmlFor="disable" className="text-black cursor-pointer" title="Escriba si el grupo está deshabilitado">
             Deshabilitado
           </label>
         </div>
 
         {/* Botón de guardar */}
-        <button className="bg-indigo-500 text-white p-3 rounded-lg block w-full mt-3 shadow-md hover:bg-indigo-600">
+        <button className="bg-indigo-500 text-white p-3 rounded-lg block w-full mt-3 shadow-md hover:bg-indigo-600 cursor-pointer">
           Guardar
         </button>
       </form>
@@ -95,19 +97,29 @@ export function TableTypeFormPage() {
       {params.id && (
         <div className=" flex justify-end">
           <button
-            className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48 mt-3 button-delete"
+            className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48 mt-3 button-delete cursor-pointer"
             onClick={async () => {
               const accepted = window.confirm("¿Estás seguro?");
               if (accepted) {
-                await deleteTableType(params.id);
-                toast.success("Tipos de mesa eliminado", {
-                  position: "top-right",
-                  style: {
-                    background: "#101010",
-                    color: "#fff",
-                  },
-                });
-                navigate("/tabletypes");
+                try {
+                  await deleteTableType(params.id);
+                  toast.success("Tipo de mesa eliminada", {
+                    position: "top-right",
+                    style: {
+                      background: "#101010",
+                      color: "#fff",
+                    },
+                  });
+                  navigate("/tabletypes");
+                } catch (error) {
+                  toast.error(error.message, {
+                    position: "top-right",
+                    style: {
+                      background: "#101010",
+                      color: "#fff",
+                    },
+                  });
+                }
               }
             }}
           >
@@ -118,5 +130,3 @@ export function TableTypeFormPage() {
     </div>
   );
 }
-
-

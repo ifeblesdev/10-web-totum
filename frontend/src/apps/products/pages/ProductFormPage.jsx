@@ -139,23 +139,23 @@ export function ProductFormPage() {
           </div>
 
           {/* Grupo */}
-          <select
-            title="Selecciona un grupo"
-            {...register("group", { required: true })}
-            className="p-3 rounded-lg border border-gray-300"
-          >
-            <option value="">Selecciona un grupo</option>
-
-            {groups.map((group) => (
-              <option key={group.id} value={group.id}>
-                {group.description}
-              </option>
-            ))}
-          </select>
-
-          {errors.group && (
-            <span className="text-red-500">Grupo requerido</span>
-          )}
+          <div className="flex flex-col">
+            <select
+              title="Selecciona un grupo"
+              {...register("group", { required: true })}
+              className="p-3 rounded-lg border border-gray-300"
+            >
+              <option value="">Selecciona un grupo</option>
+              {groups.map((group) => (
+                <option key={group.id} value={group.id}>
+                  {group.description}
+                </option>
+              ))}
+            </select>
+            {errors.group && (
+              <span className="text-red-500 text-sm mt-1">Grupo requerido</span>
+            )}
+          </div>
 
           <input
             type="text"
@@ -169,17 +169,26 @@ export function ProductFormPage() {
           <input
             type="number"
             step="0.01"
+            min="0"
             title="Escriba el precio 1 del producto"
             placeholder="Precio 1"
-            {...register("price1")}
+            {...register("price1", {
+              min: { value: 0 },
+              valueAsNumber: true,
+            })}
             className="p-3 rounded-lg border border-gray-300"
           />
+
           <input
             type="number"
             step="0.01"
+            min="0"
             title="Escriba el precio con IVA 1 del producto"
             placeholder="Precio con IVA 1"
-            {...register("price_with_vat1")}
+            {...register("price_with_vat1", {
+              min: { value: 0 },
+              valueAsNumber: true,
+            })}
             className="p-3 rounded-lg border border-gray-300"
           />
 
@@ -194,15 +203,19 @@ export function ProductFormPage() {
           <input
             type="number"
             placeholder="Stock"
+            min="0"
             title="Escriba el stock del producto"
-            {...register("stock")}
+            {...register("stock", {
+              min: { value: 0 },
+              valueAsNumber: true,
+            })}
             className="p-3 rounded-lg border border-gray-300"
           />
 
           {/* Impresoras */}
           {Array.from({ length: 6 }).map((_, i) => (
             <select
-              title=""
+              title="Selecciona una impresora para la comanda"
               key={i}
               {...register(`printer_commands${i + 1}`)}
               className="p-3 rounded-lg border border-gray-300"
@@ -228,16 +241,22 @@ export function ProductFormPage() {
                 name: "disabled",
                 label: "Deshabilitado",
               },
-            ].map(({ name, label }) => (
-              <label key={name} className="flex items-center">
-                <input type="checkbox" {...register(name)} className="mr-2" />
+            ].map(({ name, label, defaultChecked }) => (
+              <label key={name} className="flex items-center" title={label}>
+                <input
+                  type="checkbox"
+                  {...register(name)}
+                  defaultChecked={defaultChecked}
+                  className="mr-2"
+                  title={label}
+                />
                 {label}
               </label>
             ))}
           </div>
         </div>
 
-        <button className="bg-indigo-500 text-white p-3 rounded-lg w-full mt-6 shadow-md hover:bg-indigo-600">
+        <button className="bg-indigo-500 text-white p-3 rounded-lg w-full mt-6 shadow-md hover:bg-indigo-600 cursor-pointer">
           Guardar
         </button>
 
@@ -258,7 +277,7 @@ export function ProductFormPage() {
                   navigate("/products");
                 }
               }}
-              className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48"
+              className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48 cursor-pointer"
             >
               Eliminar
             </button>

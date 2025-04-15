@@ -61,7 +61,6 @@ export function TableFormPage() {
     navigate("/tables");
   });
 
-
   useEffect(() => {
     async function loadData() {
       try {
@@ -82,7 +81,7 @@ export function TableFormPage() {
           }
 
           if (data.environment) {
-            setValue("environment", data.environment); 
+            setValue("environment", data.environment);
           }
           if (data.printer_commands1) {
             setValue("printer_commands1", data.printer_commands1);
@@ -112,6 +111,7 @@ export function TableFormPage() {
         <input
           type="text"
           placeholder="Descripción de la mesa"
+          title="Escriba la descripción de la mesa"
           {...register("description", { required: true })}
           className="form-input bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
         />
@@ -123,9 +123,15 @@ export function TableFormPage() {
         <input
           type="number"
           placeholder="Número de copias"
-          {...register("copies", { required: true, min: 0 })}
+          title="Escriba el número de copias"
+          {...register("copies", {
+            min: { value: 0, message: "El mínimo es 0" },
+            max: { value: 10, message: "El máximo es 10" },
+          })}
           className="form-input bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
         />
+        {errors.copies && <p className="text-red-500 text-sm">{errors.copies.message}</p>}
+
 
         {/* Checkboxes */}
         {[
@@ -148,10 +154,15 @@ export function TableFormPage() {
             <input
               id={field}
               type="checkbox"
+              title={translations[field] || field.replaceAll("_", " ")}
               {...register(field)}
-              className="mr-2"
+              className="mr-2 cursor-pointer"
             />
-            <label htmlFor={field} className="capitalize">
+            <label
+              htmlFor={field}
+              className="capitalize cursor-pointer"
+              title={translations[field] || field.replaceAll("_", " ")}
+            >
               {translations[field] || field.replaceAll("_", " ")}
             </label>
           </div>
@@ -160,6 +171,7 @@ export function TableFormPage() {
         <select
           {...register("printer_commands1")}
           className="form-input bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
+          title="Selecciona una impresora para la comanda"
         >
           <option value="">Selecciona una impresora (1)</option>
           {printersRes && printersRes.length > 0 ? (
@@ -176,6 +188,7 @@ export function TableFormPage() {
         <select
           {...register("printer_commands2")}
           className="form-input bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
+          title="Selecciona una impresora para la comanda"
         >
           <option value="">Selecciona una impresora (2)</option>
           {printersRes && printersRes.length > 0 ? (
@@ -192,6 +205,7 @@ export function TableFormPage() {
         <select
           {...register("environment", { required: true })}
           className="form-input bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
+          title="Selecciona un ambiente para la mesa"
         >
           <option value="">Selecciona un entorno</option>
           {environmentsRes && environmentsRes.length > 0 ? (
@@ -211,6 +225,7 @@ export function TableFormPage() {
         <select
           {...register("table_type")}
           className="form-input bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
+          title="Selecciona un tipo de mesa"
         >
           <option value="">Selecciona un tipo de mesa</option>
           {tabletypesRes && tabletypesRes.length > 0 ? (
@@ -223,7 +238,7 @@ export function TableFormPage() {
             <option>No hay tipos de mesas disponibles</option>
           )}
         </select>
-        <button className="bg-indigo-500 text-white p-3 rounded-lg block w-full mt-3 shadow-md hover:bg-indigo-600">
+        <button className="bg-indigo-500 text-white p-3 rounded-lg block w-full mt-3 shadow-md hover:bg-indigo-600 cursor-pointer">
           Guardar
         </button>
       </form>
@@ -231,7 +246,7 @@ export function TableFormPage() {
       {params.id && (
         <div className="flex justify-end">
           <button
-            className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48 mt-3"
+            className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48 mt-3 cursor-pointer"
             onClick={async () => {
               const accepted = window.confirm("¿Estás seguro?");
               if (accepted) {

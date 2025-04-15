@@ -35,6 +35,7 @@ export default function ProductList() {
         <table className="min-w-full bg-white">
           <thead className="bg-gray-200 text-gray-600 uppercase text-sm">
             <tr>
+              <th className="text-left py-3 px-2">Código</th>
               <th className="text-left py-3 px-2">Descripción</th>
               <th className="text-center py-3 px-2">Acciones</th>
             </tr>
@@ -42,6 +43,9 @@ export default function ProductList() {
           <tbody className="text-gray-700">
             {products.map((product) => (
               <tr key={product.id} className="border-b">
+                <td className="py-3 px-4">
+                  {product.code}
+                </td>
                 <td className="py-3 px-4">
                   {product.description}
                 </td>
