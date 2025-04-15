@@ -5,7 +5,8 @@ class Product(models.Model):
     description = models.CharField(max_length=255, null=True, blank=True)
     group = models.ForeignKey('groups.Group', on_delete=models.PROTECT,related_name='group')
     command_description = models.CharField(max_length=255, null=True, blank=True)
-    vat_type = models.CharField(max_length=50, null=True, blank=True)
+    # vat_type = models.CharField(max_length=50, null=True, blank=True)
+    vat_type = models.ForeignKey('vatrates.VatRate', on_delete=models.PROTECT, related_name='vat_type', null=True, blank=True)
 
     price1 = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     price_with_vat1 = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)

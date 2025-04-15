@@ -27,4 +27,5 @@ urlpatterns = [
     path('', include('apps.tabletypes.urls')),
     path('', include('apps.environments.urls')),
     path('', include('apps.printers.urls')),
+    path('', include('apps.vatrates.urls')),
 ]
