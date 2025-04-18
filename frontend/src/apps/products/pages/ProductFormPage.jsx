@@ -11,6 +11,7 @@ import {
   updatedProduct,
   deleteProduct,
 } from "../api";
+import { CurrencyInput } from "../../../components/CurrencyInput";
 
 export function ProductFormPage() {
   const {
@@ -18,7 +19,13 @@ export function ProductFormPage() {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm();
+    control,
+  } = useForm({
+    defaultValues: {
+      price1: 0,
+      price_with_vat1: 0,
+    },
+  });
 
   const navigate = useNavigate();
   const params = useParams();
@@ -33,7 +40,7 @@ export function ProductFormPage() {
         const { data: groupsRes } = await getGroups();
         const { data: printersRes } = await getPrinters();
         const { data: vatratesRes } = await getVatRates();
-        
+
         setPrinters(printersRes);
         setGroups(groupsRes);
         setVatRates(vatratesRes);
@@ -47,30 +54,6 @@ export function ProductFormPage() {
             }
           }
 
-          if (data.group) {
-            setValue("group", data.group);
-          }
-          if (data.printer_commands1) {
-            setValue("printer_commands1", data.printer_commands1);
-          }
-          if (data.printer_commands2) {
-            setValue("printer_commands2", data.printer_commands2);
-          }
-          if (data.printer_commands3) {
-            setValue("printer_commands3", data.printer_commands3);
-          }
-          if (data.printer_commands4) {
-            setValue("printer_commands4", data.printer_commands4);
-          }
-          if (data.printer_commands5) {
-            setValue("printer_commands5", data.printer_commands5);
-          }
-          if (data.printer_commands6) {
-            setValue("printer_commands6", data.printer_commands6);
-          }
-          if (data.vat_type) {
-            setValue("vat_type", data.vat_type);
-          }
         }
       } catch (error) {
         toast.error("Error al cargar los datos relacionados con el producto.");
@@ -81,7 +64,21 @@ export function ProductFormPage() {
   }, [params.id, setValue]);
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log("Payload a enviar:", data);
     for (let key in data) {
+      if (key === 'price1' || key === 'price_with_vat1') {
+        if (typeof data[key] === 'string') {
+          data[key] = data[key].replace(/[^\d.-]/g, "");
+        }
+        let numericValue = parseFloat(data[key]);
+
+        if (isNaN(numericValue) || numericValue === 0) {
+          data[key] = 0;
+        } else {
+          data[key] = numericValue;
+        }
+      }
+
       if (data[key] === "") {
         data[key] = null;
       }
@@ -164,14 +161,6 @@ export function ProductFormPage() {
             )}
           </div>
 
-          {/* <input
-            type="text"
-            placeholder="Tipo de IVA"
-            title="Escriba el tipo de IVA del producto"
-            {...register("vat_type")}
-            className="p-3 rounded-lg border border-gray-300"
-          /> */}
-
           {/* Tipo iva */}
           <div className="flex flex-col">
             <select
@@ -187,35 +176,29 @@ export function ProductFormPage() {
               ))}
             </select>
             {errors.vat_type && (
-              <span className="text-red-500 text-sm mt-1">Tipo iva requerido</span>
+              <span className="text-red-500 text-sm mt-1">
+                Tipo iva requerido
+              </span>
             )}
           </div>
 
           {/* Precios */}
-          <input
-            type="number"
-            step="0.01"
-            min="0"
-            title="Escriba el precio 1 del producto"
+          <CurrencyInput
+            name="price1"
+            control={control}
+            label="Precio 1"
+            required={true}
             placeholder="Precio 1"
-            {...register("price1", {
-              min: { value: 0 },
-              valueAsNumber: true,
-            })}
-            className="p-3 rounded-lg border border-gray-300"
+            title="Escriba el precio 1 del producto"
           />
 
-          <input
-            type="number"
-            step="0.01"
-            min="0"
-            title="Escriba el precio con IVA 1 del producto"
-            placeholder="Precio con IVA 1"
-            {...register("price_with_vat1", {
-              min: { value: 0 },
-              valueAsNumber: true,
-            })}
-            className="p-3 rounded-lg border border-gray-300"
+          <CurrencyInput
+            name="price_with_vat1"
+            control={control}
+            label="Precio 1 más IVA"
+            required={true}
+            placeholder="Precio 1 más IVA"
+            title="Escriba el precio 1  mas IVA del producto"
           />
 
           {/* Código adicional y stock */}
