@@ -32,5 +32,13 @@ class Configuration(models.Model):
     uses_total_rounding = models.BooleanField(default=False)
     disabled = models.BooleanField(default=False)
 
+
+    class Meta:
+        db_table='configuration'
+        verbose_name='Configuration'
+        verbose_name_plural='Configurations'
+        ordering = ['id']
+
+
     def __str__(self):
         return f"Configuration"
