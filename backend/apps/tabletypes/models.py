@@ -15,6 +15,7 @@ class TableType(models.Model):
         verbose_name='TableType'
         verbose_name_plural='TableTypes'
         ordering = ['description']
+        
 
     def __str__(self):
         return self.description

@@ -48,7 +48,13 @@ INSTALLED_APPS = [
     'apps.tabletypes',
     'apps.waiters',
     'apps.products',
+    'apps.boxes',
+    'apps.company',
+    'apps.configuration',
+    'apps.systemusers',
+    'apps.usergroups',
     'apps.vatrates',
+
 ]
 
 MIDDLEWARE = [
