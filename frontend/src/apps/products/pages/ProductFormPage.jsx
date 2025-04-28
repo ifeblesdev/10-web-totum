@@ -53,7 +53,6 @@ export function ProductFormPage() {
               setValue(key, data[key]);
             }
           }
-
         }
       } catch (error) {
         toast.error("Error al cargar los datos relacionados con el producto.");
@@ -66,8 +65,8 @@ export function ProductFormPage() {
   const onSubmit = handleSubmit(async (data) => {
     console.log("Payload a enviar:", data);
     for (let key in data) {
-      if (key === 'price1' || key === 'price_with_vat1') {
-        if (typeof data[key] === 'string') {
+      if (key === "price1" || key === "price_with_vat1") {
+        if (typeof data[key] === "string") {
           data[key] = data[key].replace(/[^\d.-]/g, "");
         }
         let numericValue = parseFloat(data[key]);
@@ -118,7 +117,7 @@ export function ProductFormPage() {
               placeholder="Código"
               title="Escriba el código del producto"
               {...register("code", { required: true })}
-              className="bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
+              className="bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3 cursor-pointer"
             />
             {errors.code && (
               <span className="text-red-500">Código requerido</span>
@@ -251,12 +250,18 @@ export function ProductFormPage() {
                 label: "Deshabilitado",
               },
             ].map(({ name, label, defaultChecked }) => (
-              <label key={name} className="flex items-center" title={label}>
+              <label
+                key={name}
+                className="flex items-center cursor-pointer"
+                title={label}
+                htmlFor={name}
+              >
                 <input
+                  id={name}
                   type="checkbox"
                   {...register(name)}
                   defaultChecked={defaultChecked}
-                  className="mr-2"
+                  className="mr-2 cursor-pointer"
                   title={label}
                 />
                 {label}

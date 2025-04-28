@@ -30,13 +30,14 @@ import ProductList from "./apps/products/components/ProductList";
 import { VatRatesLayout } from "./apps/vatrates/layouts/VatRatesLayout";
 import { VatRateFormPage } from "./apps/vatrates/pages/VatRateFormPage";
 import VatRateList from "./apps/vatrates/components/VatRateList";
+import { ConfigurationFormPage } from "./apps/configuration/pages/ConfigurationFormPage";
 import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <Router>
       <Navbar />
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-100 flex items-start justify-center p-4">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
@@ -96,6 +97,11 @@ function App() {
             <Route path="create" element={<VatRateFormPage />} />
             <Route path="edit/:id" element={<VatRateFormPage />} />
           </Route>
+
+          {/* Configuration */}
+          <Route path="/configuration" element={<ConfigurationFormPage />} />
+
+
         </Routes>
         <Toaster />
       </div>

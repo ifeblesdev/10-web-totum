@@ -28,36 +28,43 @@ export default function ClientList() {
   };
 
   return (
-    <div className="p-4">
-
-      <div className="overflow-auto rounded-lg shadow">
-        <table className="min-w-full bg-white">
-          <thead className="bg-gray-200 text-gray-600 uppercase text-sm">
+    <div className="p-4 pt-0">
+      <div className="overflow-x-auto rounded-lg shadow">
+        <table className="min-w-full bg-white text-xs md:text-sm">
+          <thead className="bg-gray-200 text-gray-600 uppercase">
             <tr>
-              <th className="text-left py-3 px-4">Nombre</th>
-              <th className="text-left py-3 px-4">Correo</th>
-              <th className="text-left py-3 px-4">Teléfono</th>
-              <th className="text-left py-3 px-4">Acciones</th>
+              <th className="text-left py-2 px-2 md:py-3 md:px-4">Nombre</th>
+              <th className="hidden md:table-cell text-left py-2 px-2 md:py-3 md:px-4">
+                Correo
+              </th>
+              <th className="hidden md:table-cell text-left py-2 px-2 md:py-3 md:px-4">
+                Teléfono
+              </th>
+              <th className="text-left py-2 px-2 md:py-3 md:px-4">Acciones</th>
             </tr>
           </thead>
           <tbody className="text-gray-700">
             {clients.map((client) => (
               <tr key={client.id} className="border-b">
-                <td className="py-3 px-4">
+                <td className="py-2 px-2 md:py-3 md:px-4">
                   {client.first_name} {client.last_name}
                 </td>
-                <td className="py-3 px-4">{client.email}</td>
-                <td className="py-3 px-4">{client.phone}</td>
-                <td className="py-3 px-4 space-x-2">
+                <td className="hidden md:table-cell py-2 px-2 md:py-3 md:px-4">
+                  {client.email}
+                </td>
+                <td className="hidden md:table-cell py-2 px-2 md:py-3 md:px-4">
+                  {client.phone}
+                </td>
+                <td className="py-2 px-2 md:py-3 md:px-4 flex flex-col md:flex-row gap-2">
                   <button
-                    onClick={() => navigate(`/clients/edit/${client.id}`)}                    
-                    className="bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600"
+                    onClick={() => navigate(`/clients/edit/${client.id}`)}
+                    className="bg-indigo-500 text-white px-2 py-1 rounded hover:bg-indigo-600 text-xs md:text-sm"
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => handleDelete(client.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-xs md:text-sm"
                   >
                     Eliminar
                   </button>

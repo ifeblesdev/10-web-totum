@@ -43,7 +43,7 @@ export function CurrencyInput({
             onValueChange={({ floatValue }) => {
               field.onChange(floatValue ?? null);
             }}
-            className="p-3 rounded-lg border border-gray-300"
+            className="p-3 rounded-lg border border-gray-300 text-right"
             placeholder={placeholder || label}
           />
           {error && (
