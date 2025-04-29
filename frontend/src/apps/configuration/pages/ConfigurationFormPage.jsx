@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import {
   createConfiguration,
   getConfiguration,
@@ -8,6 +9,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { configurationFields } from "../../../config/formFields";
 
+
 export function ConfigurationFormPage() {
   const {
     register,
@@ -15,7 +17,8 @@ export function ConfigurationFormPage() {
     formState: { errors },
     setValue,
   } = useForm();
-
+  
+  const navigate = useNavigate();
   const [configExists, setConfigExists] = useState(false);
   const [configId, setConfigId] = useState(null);
 
@@ -28,18 +31,21 @@ export function ConfigurationFormPage() {
 
     try {
       if (configExists) {
-        await updateConfiguration(configId, data); // Usamos el ID del registro existente
+        await updateConfiguration(configId, data); 
         toast.success("Configuración actualizada", {
           position: "top-right",
           style: { background: "#101010", color: "#fff" },
         });
       } else {
-        await createConfiguration(data); // Si no existe, creamos una nueva configuración
+        await createConfiguration(data);
         toast.success("Configuración creada", {
           position: "top-right",
           style: { background: "#101010", color: "#fff" },
-        });
+        }
+        )
+        
       }
+      navigate("/"); 
     } catch (error) {
       toast.error("Error al guardar la configuración", {
         position: "top-right",

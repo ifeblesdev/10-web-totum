@@ -10,7 +10,9 @@ class SystemUser(models.Model):
     )
     box = models.ForeignKey(
         'boxes.Box',
-        on_delete=models.PROTECT  
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True  
     )
     disabled = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

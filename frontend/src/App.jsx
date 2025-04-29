@@ -43,6 +43,10 @@ import { UserGroupsLayout } from "./apps/usergroups/layouts/UserGroupsLayout";
 import { UserGroupFormPage } from "./apps/usergroups/pages/UserGroupFormPage";
 import UserGroupList from "./apps/usergroups/components/UserGroupList";
 
+import { SystemUsersLayout } from "./apps/systemusers/layouts/SystemUsersLayout";
+import { SystemUserFormPage } from "./apps/systemusers/pages/SystemUserFormPage";
+import SystemUserList from "./apps/systemusers/components/SystemUserList";
+
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -125,6 +129,13 @@ function App() {
             <Route index element={<UserGroupList />} />
             <Route path="create" element={<UserGroupFormPage />} />
             <Route path="edit/:id" element={<UserGroupFormPage />} />
+          </Route>
+
+          {/* System Users */}
+          <Route path="/systemusers" element={<SystemUsersLayout />}>
+            <Route index element={<SystemUserList />} />
+            <Route path="create" element={<SystemUserFormPage />} />
+            <Route path="edit/:id" element={<SystemUserFormPage />} />
           </Route>
 
 

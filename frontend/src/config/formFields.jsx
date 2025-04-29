@@ -277,3 +277,58 @@ export const boxFields = [
     required: false,
   },
 ];
+
+
+export const systemUserFields = [
+  {
+    name: "login",
+    label: "Usuario",
+    type: "text",
+    maxLength: 20,
+    minLength: 4,
+    required: true,
+    tooltip: "Nombre de usuario único para iniciar sesión (mínimo 4 caracteres).",
+    placeholder: "Ej: juan.garcia"
+  },
+  {
+    name: "password",
+    label: "Contraseña",
+    type: "password",
+    maxLength: 20,
+    minLength: 6,
+    required: true,
+    tooltip: "Contraseña del usuario (mínimo 6 caracteres).",
+    placeholder: "********"
+  },
+  {
+    name: "name",
+    label: "Nombre completo",
+    type: "text",
+    maxLength: 120,
+    required: true,
+    tooltip: "Nombre real del usuario.",
+    placeholder: "Ej: Juan García"
+  },
+  {
+    name: "user_group",
+    label: "Grupo de usuario",
+    type: "select",
+    source: "usergroups",
+    required: true,
+    tooltip: "Rol del usuario en el sistema (Cajero, Camarero, Gerente...)."
+  },
+  {
+    name: "box",
+    label: "Caja asignada",
+    type: "select",
+    source: "boxes",
+    required: false,
+    tooltip: "Caja asociada a este usuario para operaciones."
+  },
+  {
+    name: "disabled",
+    label: "Deshabilitado",
+    type: "checkbox",
+    tooltip: "Marca si el usuario está inactivo y no puede iniciar sesión."
+  }
+];

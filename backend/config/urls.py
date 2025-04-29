@@ -31,4 +31,5 @@ urlpatterns = [
     path('', include('apps.configuration.urls')),
     path('', include('apps.boxes.urls')),
     path('', include('apps.usergroups.urls')),
+    path('', include('apps.systemusers.urls')),
 ]

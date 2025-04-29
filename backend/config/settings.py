@@ -53,8 +53,7 @@ INSTALLED_APPS = [
     'apps.configuration',
     'apps.systemusers',
     'apps.usergroups',
-    'apps.vatrates',
-
+    'apps.vatrates',    
 
 ]
 

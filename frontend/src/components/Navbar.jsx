@@ -49,6 +49,7 @@ export function Navbar() {
         { label: "Grupos de usuarios", to: "/usergroups" },
         { label: "Impresoras", to: "/printers" },
         { label: "IVA", to: "/vatrates" },
+        { label: "Usuarios del sistema", to: "/systemusers" },
       ],
     },
     {
@@ -79,9 +80,10 @@ export function Navbar() {
 
   return (
     <nav className="bg-white shadow-md px-4 sm:px-6 py-4 sticky top-0 z-50 w-full">
-      <div className="flex items-center justify-between" ref={menuRef}> {/* Añadir ref al contenedor del menú */}
+      <div className="flex items-center justify-between" ref={menuRef}>
+        {" "}
+        {/* Añadir ref al contenedor del menú */}
         <div className="text-xl font-bold text-indigo-600">Mi App</div>
-
         {/* Botón hamburguesa */}
         <div className="md:hidden">
           <button
@@ -92,7 +94,6 @@ export function Navbar() {
             {isOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
-
         {/* Menú en escritorio */}
         <div className="hidden md:flex items-center gap-6">
           {menuStructure.map((item, idx) => {
@@ -111,14 +112,16 @@ export function Navbar() {
 
                 {isOpen && (
                   <div className="absolute left-0 top-full mt-2 flex flex-col bg-white shadow-lg rounded-lg z-50 min-w-[150px]">
-                    {item.children.map((child) =>
-                      renderLink(child.to, child.label)
-                    )}
+                    {item.children.map((child) => (
+                      <div key={child.to}>
+                        {renderLink(child.to, child.label)}
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
             ) : (
-              renderLink(item.to, item.label)
+              <div key={item.to}>{renderLink(item.to, item.label)}</div>
             );
           })}
         </div>
@@ -147,14 +150,16 @@ export function Navbar() {
 
                 {isOpen && (
                   <div className="absolute left-0 top-full mt-2 flex flex-col bg-white shadow-lg rounded-lg z-50 min-w-[150px]">
-                    {item.children.map((child) =>
-                      renderLink(child.to, child.label)
-                    )}
+                    {item.children.map((child) => (
+                      <div key={child.to}>
+                        {renderLink(child.to, child.label)}
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
             ) : (
-              renderLink(item.to, item.label)
+              <div key={item.to}>{renderLink(item.to, item.label)}</div>
             );
           })}
         </div>
