@@ -1,7 +1,7 @@
 from django.db import models
 
 class SystemUser(models.Model):
-    login = models.CharField(max_length=20, primary_key=True)
+    login = models.CharField(max_length=20, unique=True)
     password = models.CharField(max_length=20)
     name = models.CharField(max_length=120)
     user_group = models.ForeignKey(

@@ -24,13 +24,25 @@ import PrinterList from "./apps/printers/components/PrinterList";
 import { TablesLayout } from "./apps/tables/layouts/TablesLayout";
 import { TableFormPage } from "./apps/tables/pages/TableFormPage";
 import TableList from "./apps/tables/components/TableList";
+
 import { ProductsLayout } from "./apps/products/layouts/ProductsLayout";
 import { ProductFormPage } from "./apps/products/pages/ProductFormPage";
 import ProductList from "./apps/products/components/ProductList";
+
 import { VatRatesLayout } from "./apps/vatrates/layouts/VatRatesLayout";
 import { VatRateFormPage } from "./apps/vatrates/pages/VatRateFormPage";
 import VatRateList from "./apps/vatrates/components/VatRateList";
+
 import { ConfigurationFormPage } from "./apps/configuration/pages/ConfigurationFormPage";
+
+import { BoxesLayout } from "./apps/boxes/layouts/BoxesLayout";
+import { BoxFormPage } from "./apps/boxes/pages/BoxFormPage";
+import BoxList from "./apps/boxes/components/BoxList";
+
+import { UserGroupsLayout } from "./apps/usergroups/layouts/UserGroupsLayout";
+import { UserGroupFormPage } from "./apps/usergroups/pages/UserGroupFormPage";
+import UserGroupList from "./apps/usergroups/components/UserGroupList";
+
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -100,6 +112,20 @@ function App() {
 
           {/* Configuration */}
           <Route path="/configuration" element={<ConfigurationFormPage />} />
+
+          {/* Boxes */}
+          <Route path="/boxes" element={<BoxesLayout />}>
+            <Route index element={<BoxList />} />
+            <Route path="create" element={<BoxFormPage />} />
+            <Route path="edit/:id" element={<BoxFormPage />} />
+          </Route>
+
+          {/* User Groups */}
+          <Route path="/usergroups" element={<UserGroupsLayout />}>
+            <Route index element={<UserGroupList />} />
+            <Route path="create" element={<UserGroupFormPage />} />
+            <Route path="edit/:id" element={<UserGroupFormPage />} />
+          </Route>
 
 
         </Routes>

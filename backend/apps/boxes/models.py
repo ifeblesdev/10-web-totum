@@ -1,7 +1,7 @@
 from django.db import models
 
 class Box(models.Model):  
-    code = models.IntegerField(primary_key=True)  
+    code = models.IntegerField(unique=True)  
     description = models.CharField(max_length=120)  
     invoice_sequence = models.IntegerField(default=1) 
     disabled = models.BooleanField(default=False)  

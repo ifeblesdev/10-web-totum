@@ -29,4 +29,6 @@ urlpatterns = [
     path('', include('apps.printers.urls')),
     path('', include('apps.vatrates.urls')),
     path('', include('apps.configuration.urls')),
+    path('', include('apps.boxes.urls')),
+    path('', include('apps.usergroups.urls')),
 ]
