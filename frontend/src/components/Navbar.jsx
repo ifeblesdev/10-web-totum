@@ -34,6 +34,7 @@ export function Navbar() {
       label: "Archivos",
       children: [
         { label: "Ambientes", to: "/environments" },
+        { label: "Camareros", to: "/waiters" },
         { label: "Clientes", to: "/clients" },
         { label: "Grupos", to: "/groups" },
         { label: "Mesas", to: "/tables" },

@@ -31,6 +31,14 @@ class Configuration(models.Model):
     uses_currency = models.BooleanField(default=False)
     uses_total_rounding = models.BooleanField(default=False)
     disabled = models.BooleanField(default=False)
+    close_table_totals = models.BooleanField(default=False)
+    close_card_totals = models.BooleanField(default=False)
+    close_sorted_by_group = models.BooleanField(default=False)
+    close_sales_by_product = models.BooleanField(default=False)
+    close_sales_by_invoice = models.BooleanField(default=False)
+    close_expense_report = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
     class Meta:

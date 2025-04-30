@@ -47,6 +47,10 @@ import { SystemUsersLayout } from "./apps/systemusers/layouts/SystemUsersLayout"
 import { SystemUserFormPage } from "./apps/systemusers/pages/SystemUserFormPage";
 import SystemUserList from "./apps/systemusers/components/SystemUserList";
 
+import { WaitersLayout } from "./apps/waiters/layouts/WaitersLayout";
+import { WaiterFormPage } from "./apps/waiters/pages/WaiterFormPage";
+import WaiterList from "./apps/waiters/components/WaiterList";
+
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -136,6 +140,13 @@ function App() {
             <Route index element={<SystemUserList />} />
             <Route path="create" element={<SystemUserFormPage />} />
             <Route path="edit/:id" element={<SystemUserFormPage />} />
+          </Route>
+
+          {/* Waiters */}
+          <Route path="/waiters" element={<WaitersLayout />}>
+            <Route index element={<WaiterList />} />
+            <Route path="create" element={<WaiterFormPage />} />
+            <Route path="edit/:id" element={<WaiterFormPage />} />
           </Route>
 
 

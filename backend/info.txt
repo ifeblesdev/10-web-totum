@@ -1,22 +1,13 @@
-          caja-defecto                     
-          mesa-defecto                   
-          solo-pedidos                 
-          ejecuta-menu-archivos 
-          ejecuta-menu-configuracion                    
-          ejecuta-menu-informes         
-          ejecutar-cierre   
-          imprimir-pedido           
-          reimprimir-pedido         
-          abrir-caja                        
-          mudar-mesa                        
-          dividir-mesa                     
-          cambiar-camarero                  
-          pedir-clave-camarero              
-          ver-venta                   
-          facturar-pedido                          
-          salir                             
-          otras-opciones                              agrupar-renglon                           
-          reducir-renglon   
-          repetir-renglon             
-          repetir-ultimo-renglon
-          eliminar-renglon
+
+
+
+
+cierre-totales-mesa bool
+cierre-totales-tarjeta bool
+cierre-ordenado-grupo bool
+cierre-ventas-productos bool
+cierre-ventas-factura bool
+cierre-reporte-gastos bool
+
+
+********

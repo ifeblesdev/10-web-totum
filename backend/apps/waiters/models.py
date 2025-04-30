@@ -4,14 +4,13 @@ from django.db import models
 
 
 class Waiter(models.Model):
-    description = models.CharField(max_length=120)
-    points = models.IntegerField(default=0)
-    password = models.CharField(max_length=20)
+    description = models.CharField(max_length=120, null=True, blank=True)
+    points = models.IntegerField(default=0, null=True, blank=True)
+    password = models.CharField(max_length=20, null=True, blank=True)
     commands = models.BooleanField(default=False)
     disable = models.BooleanField(default=False)
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
-    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table='waiters'

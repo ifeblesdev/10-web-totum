@@ -1,13 +1,11 @@
 import { useForm } from "react-hook-form";
-import { createBox, getBox, updatedBox, deleteBox } from "../api";
+import { createWaiter, getWaiter, updatedWaiter, deleteWaiter } from "../api";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { boxFields } from "../../../config/formFields";
+import { waiterFields } from "../../../config/formFields";
 import { useNavigate, useParams } from "react-router-dom";
-import { getPrinters } from "../../printers/api";
-import { getWaiters } from "../../waiters/api";
 
-export function BoxFormPage() {
+export function WaiterFormPage() {
   const {
     register,
     handleSubmit,
@@ -18,20 +16,11 @@ export function BoxFormPage() {
   const navigate = useNavigate();
   const params = useParams();
 
-  const [printers, setPrinters] = useState([]);
-  const [waiters, setWaiters] = useState([]);
-
   useEffect(() => {
     async function loadData() {
       try {
-        const { data: printersRes } = await getPrinters();
-        const { data: waitersRes } = await getWaiters();
-
-        setPrinters(printersRes);
-        setWaiters(waitersRes);
-
         if (params.id) {
-          const { data } = await getBox(params.id);
+          const { data } = await getWaiter(params.id);
 
           for (let key in data) {
             if (data[key] !== null) {
@@ -40,7 +29,7 @@ export function BoxFormPage() {
           }
         }
       } catch (error) {
-        toast.error("Error al cargar los datos relacionados con la caja.");
+        toast.error("Error al cargar los datos relacionados con el camarero.");
       }
     }
 
@@ -48,24 +37,22 @@ export function BoxFormPage() {
   }, [params.id, setValue]);
 
   const onSubmit = handleSubmit(async (data) => {
-    for (let key in data) {
-      if (data[key] === "") {
-        data[key] = null;
-      }
-    }
+    Object.keys(data).forEach((key) => {
+      if (data[key] === "") data[key] = null;
+    });
 
     try {
       if (params.id) {
-        await updatedBox(params.id, data);
-        toast.success("Caja actualizada");
+        await updatedWaiter(params.id, data);
+        toast.success("Camarero actualizado");
       } else {
-        await createBox(data);
-        toast.success("Caja creada");
+        await createWaiter(data);
+        toast.success("Camarero creado");
       }
     } catch {
-      toast.error("Error al guardar la caja");
+      toast.error("Error al guardar el camarero");
     }
-    navigate("/boxes");
+    navigate("/waiters");
   });
 
   return (
@@ -75,7 +62,7 @@ export function BoxFormPage() {
         className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-4xl"
       >
         {/* Campos normales */}
-        {boxFields
+        {waiterFields
           .filter(({ type }) => type !== "checkbox")
           .map(({ name, label, type, required, validation, tooltip }) => (
             <div key={name} className="mb-4">
@@ -85,55 +72,17 @@ export function BoxFormPage() {
               >
                 {label}
               </label>
-
-              {type === "textarea" ? (
-                <textarea
-                  id={name}
-                  placeholder={label}
-                  title={tooltip}
-                  rows={5}
-                  {...register(name, {
-                    required: required ? `${label} es requerido` : false,
-                    ...validation,
-                  })}
-                  className="bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full resize-y overflow-auto"
-                />
-              ) : type === "select" ? (
-                <select
-                  id={name}
-                  title={tooltip}
-                  {...register(name, {
-                    required: required ? `${label} es requerido` : false,
-                    ...validation,
-                  })}
-                  className="bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full cursor-pointer"
-                >
-                  <option value="">Seleccione una opción</option>
-                  {(name === "printer" || name === "closing_printer"
-                    ? printers
-                    : name === "waiter"
-                    ? waiters
-                    : []
-                  ).map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.description || item.name}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  id={name}
-                  type={type}
-                  placeholder={label}
-                  title={tooltip}
-                  {...register(name, {
-                    required: required ? `${label} es requerido` : false,
-                    ...validation,
-                  })}
-                  className="bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full cursor-pointer"
-                />
-              )}
-
+              <input
+                id={name}
+                type={type}
+                placeholder={label}
+                title={tooltip} // Tooltip sobre el campo
+                {...register(name, {
+                  required: required ? `${label} es requerido` : false,
+                  ...validation,
+                })}
+                className="bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full cursor-pointer"
+              />
               {errors[name] && (
                 <span className="text-red-500 text-sm">
                   {errors[name].message}
@@ -144,7 +93,7 @@ export function BoxFormPage() {
 
         {/* Checkbox al final */}
         <div className="grid grid-cols-2 gap-4 mt-6">
-          {boxFields
+          {waiterFields
             .filter(({ type }) => type === "checkbox")
             .map(({ name, label, tooltip }) => (
               <div key={name} className="flex items-center">
@@ -178,15 +127,15 @@ export function BoxFormPage() {
               const accepted = window.confirm("¿Estás seguro?");
               if (accepted) {
                 try {
-                  await deleteBox(params.id);
-                  toast.success("Caja eliminada", {
+                  await deleteWaiter(params.id);
+                  toast.success("Camarero eliminado", {
                     position: "top-right",
                     style: {
                       background: "#101010",
                       color: "#fff",
                     },
                   });
-                  navigate("/boxes"); // Solo si se elimina correctamente
+                  navigate("/waiters"); // Solo si se elimina correctamente
                 } catch (error) {
                   toast.error(error.message, {
                     position: "top-right",
