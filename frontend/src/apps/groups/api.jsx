@@ -17,7 +17,7 @@ export const createGroup = (group) => groupsApi.post("/", group);
 export const getGroup = (id) => groupsApi.get(`/${id}/`)
 
 
-export const updatedGroup = (id, group) => groupsApi.put(`/${id}/`, group)
+export const updateGroup = (id, group) => groupsApi.put(`/${id}/`, group)
 
 export const deleteGroup = async (id) => {
   try {

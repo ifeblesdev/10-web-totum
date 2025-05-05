@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
-import { createGroup, getGroup, updatedGroup, deleteGroup } from "../api/";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { createGroup, getGroup, updateGroup, deleteGroup } from "../api"; // Asegúrate de tener estas funciones
+import { groupFields } from "../../../config/formFields";
+import ConfirmDelete from "../../../components/ConfirmDelete";
 
 export function GroupFormPage() {
   const {
@@ -10,192 +12,154 @@ export function GroupFormPage() {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm();
 
   const navigate = useNavigate();
   const params = useParams();
 
-  const onSubmit = handleSubmit(async (data) => {
-    for (let key in data) {
-      if (data[key] === "") {
-        data[key] = null;
-      }
-    }    
-    
-    if (params.id) {
-      await updatedGroup(params.id, data);
-      toast.success("Grupo actualizado", {
-        position: "top-right",
-        style: {
-          background: "#101010",
-          color: "#fff",
-        },
-      });
-    } else {
-      await createGroup(data);
-      toast.success("Grupo creado", {
-        position: "top-right",
-        style: {
-          background: "#101010",
-          color: "#fff",
-        },
-      });
-    }
-    navigate("/groups");
-  });
+  const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
-    async function loadGroup() {
+    async function loadData() {
       if (params.id) {
-        const {
-          data: {
-            description,
-            accompaniment,
-            same_screen,
-            show_order,
-            disable,
-          },
-        } = await getGroup(params.id);
-        setValue("description", description);
-        setValue("accompaniment", accompaniment);
-        setValue("same_screen", same_screen);
-        setValue("show_order", show_order ?? true);
-        setValue("disable", disable);
+        try {
+          const { data } = await getGroup(params.id);
+          for (let key in data) {
+            if (data[key] !== null) {
+              setValue(key, data[key]);
+            }
+          }
+        } catch (error) {
+          toast.error("Error al cargar los datos del grupo.");
+        }
       }
     }
-    loadGroup();
-  }, []);
+
+    loadData();
+  }, [params.id, setValue]);
+
+  const onSubmit = handleSubmit(async (data) => {
+    Object.keys(data).forEach((key) => {
+      if (data[key] === "") data[key] = null;
+    });
+
+    try {
+      if (params.id) {
+        await updateGroup(params.id, data);
+        toast.success("Grupo actualizado");
+      } else {
+        await createGroup(data);
+        toast.success("Grupo creado");
+      }
+      navigate("/groups");
+    } catch {
+      toast.error("Error al guardar el grupo");
+    }
+  });
 
   return (
     <div className="max-w-full mx-auto flex-container">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={onSubmit}
         className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-4xl"
       >
-        {/* Campo de descripción */}
-        <input
-          type="text"
-          placeholder="Description"
-          title="Escriba la descripción del grupo"
-          {...register("description", { required: true })}
-          className="bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full mb-3"
-        />
-        {errors.description && (
-          <span className="text-red-500">Descripción es requerida</span>
-        )}
+        {/* Campos ordenados dinámicamente */}
+        {groupFields
+          .filter(({ type }) => type !== "checkbox")
+          .sort((a, b) => a.order - b.order)
+          .map(({ name, label, type, required, validation, tooltip }) => (
+            <div key={name} className="mb-4">
+              <label
+                htmlFor={name}
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                {label}
+              </label>
+              <input
+                id={name}
+                type={type}
+                placeholder={label}
+                title={tooltip}
+                {...register(name, {
+                  required: required ? `${label} es requerido` : false,
+                  ...validation,
+                })}
+                className="bg-white text-black p-3 rounded-lg border border-gray-300 shadow-sm block w-full cursor-pointer"
+              />
+              {errors[name] && (
+                <span className="text-red-500 text-sm">
+                  {errors[name].message}
+                </span>
+              )}
+            </div>
+          ))}
 
-        {/* Campo de acompañamiento (booleano) */}
-        <div className="flex items-center mb-3">
-          <input
-            id="accompaniment"
-            type="checkbox"
-            title="Marque si es un acompañamiento y/o contorno"
-            {...register("accompaniment")}
-            className="mr-2 cursor-pointer"
-          />
-          <label
-            htmlFor="accompaniment"
-            className="text-black cursor-pointer"
-            title="Marque si es un acompañamiento y/o contorno"
-          >
-            Acompañamiento
-          </label>
+        {/* Checkbox al final */}
+        <div className="grid grid-cols-2 gap-4 mt-6">
+          {groupFields
+            .filter(({ type }) => type === "checkbox")
+            .sort((a, b) => a.order - b.order)
+            .map(({ name, label, tooltip }) => (
+              <div key={name} className="flex items-center">
+                <input
+                  id={name}
+                  type="checkbox"
+                  title={tooltip}
+                  {...register(name)}
+                  className="mr-2 cursor-pointer"
+                />
+                <label
+                  htmlFor={name}
+                  className="text-black cursor-pointer"
+                  title={tooltip}
+                >
+                  {label}
+                </label>
+              </div>
+            ))}
         </div>
 
-        {/* Campo de pantalla igual (booleano) */}
-        <div className="flex items-center mb-3">
-          <input
-            id="same_screen"
-            type="checkbox"
-            title="Marque si permanece en la misma pantalla al ser seleccionado"
-            {...register("same_screen")}
-            className="mr-2 cursor-pointer"
-          />
-          <label
-            htmlFor="same_screen"
-            className="text-black cursor-pointer"
-            title="Marque si permanece en la misma pantalla al ser seleccionado"
-          >
-            Misma pantalla
-          </label>
-        </div>
-
-        {/* Campo de mostrar orden (booleano) */}
-        <div className="flex items-center mb-3">
-          <input
-            id="show_order"
-            type="checkbox"
-            title="Marque si se muestra en la orden al ser seleccionado"
-            {...register("show_order")}
-            defaultChecked={true}
-            className="mr-2 cursor-pointer"
-          />
-          <label
-            htmlFor="show_order"
-            className="text-black cursor-pointer"
-            title="Marque si se muestra en la orden al ser seleccionado"
-          >
-            Mostrar orden
-          </label>
-        </div>
-
-        {/* Campo de deshabilitado (booleano) */}
-        <div className="flex items-center mb-3">
-          <input
-            id="disable"
-            type="checkbox"
-            title="Marque si el grupo está deshabilitado"
-            {...register("disable")}
-            className="mr-2 cursor-pointer"
-          />
-          <label
-            htmlFor="disable"
-            className="text-black cursor-pointer"
-            title="Marque si el grupo está deshabilitado"
-          >
-            Deshabilitado
-          </label>
-        </div>
-
-        {/* Botón de guardar */}
-        <button className="bg-indigo-500 text-white p-3 rounded-lg block w-full mt-3 shadow-md hover:bg-indigo-600 cursor-pointer">
+        <button className="bg-indigo-500 text-white p-3 rounded-lg block w-full mt-6 shadow-md hover:bg-indigo-600 cursor-pointer">
           Guardar
         </button>
       </form>
 
-      {params.id && (
-        <div className="flex justify-end">
+      <div className="flex justify-between gap-4 mt-4">
+        <button
+          type="button"
+          className="bg-gray-300 text-black p-3 rounded-lg w-full sm:w-48 hover:bg-gray-400 cursor-pointer"
+          onClick={() => reset()}
+        >
+          Limpiar
+        </button>
+
+        {params.id && (
           <button
-            className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48 mt-3 button-delete cursor-pointer"
-            onClick={async () => {
-              const accepted = window.confirm("¿Estás seguro?");
-              if (accepted) {
-                try {
-                  await deleteGroup(params.id);
-                  toast.success("Grupo eliminado", {
-                    position: "top-right",
-                    style: {
-                      background: "#101010",
-                      color: "#fff",
-                    },
-                  });
-                  navigate("/groups"); // Solo si se elimina correctamente
-                } catch (error) {
-                  toast.error(error.message, {
-                    position: "top-right",
-                    style: {
-                      background: "#101010",
-                      color: "#fff",
-                    },
-                  });
-                }
-              }
-            }}
+            type="button"
+            className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48 button-delete cursor-pointer hover:bg-red-600"
+            onClick={() => setShowConfirm(true)}
           >
             Eliminar
           </button>
-        </div>
-      )}
+        )}
+      </div>
+
+      <ConfirmDelete
+        isOpen={showConfirm}
+        title="¿Estás seguro de eliminar este grupo?"
+        message="No podrás recuperar esta información."
+        onConfirm={async () => {
+          try {
+            await deleteGroup(params.id);
+            toast.success("Grupo eliminado");
+            navigate("/groups");
+          } catch (error) {
+            toast.error(error.message);
+          }
+        }}
+        onCancel={() => setShowConfirm(false)}
+      />
     </div>
   );
 }

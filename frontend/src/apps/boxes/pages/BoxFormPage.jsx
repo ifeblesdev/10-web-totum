@@ -6,6 +6,7 @@ import { boxFields } from "../../../config/formFields";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPrinters } from "../../printers/api";
 import { getWaiters } from "../../waiters/api";
+import ConfirmDelete from "../../../components/ConfirmDelete";
 
 export function BoxFormPage() {
   const {
@@ -13,6 +14,7 @@ export function BoxFormPage() {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset
   } = useForm();
 
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ export function BoxFormPage() {
 
   const [printers, setPrinters] = useState([]);
   const [waiters, setWaiters] = useState([]);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -77,6 +80,7 @@ export function BoxFormPage() {
         {/* Campos normales */}
         {boxFields
           .filter(({ type }) => type !== "checkbox")
+          .sort((a, b) => a.order - b.order)
           .map(({ name, label, type, required, validation, tooltip }) => (
             <div key={name} className="mb-4">
               <label
@@ -146,6 +150,7 @@ export function BoxFormPage() {
         <div className="grid grid-cols-2 gap-4 mt-6">
           {boxFields
             .filter(({ type }) => type === "checkbox")
+            .sort((a, b) => a.order - b.order)
             .map(({ name, label, tooltip }) => (
               <div key={name} className="flex items-center">
                 <input
@@ -170,39 +175,41 @@ export function BoxFormPage() {
           Guardar
         </button>
       </form>
-      {params.id && (
-        <div className="flex justify-end">
+      <div className="flex justify-between gap-4 mt-4">
+        <button
+          type="button"
+          className="bg-gray-300 text-black p-3 rounded-lg w-full sm:w-48 hover:bg-gray-400 cursor-pointer"
+          onClick={() => reset()}
+        >
+          Limpiar
+        </button>
+
+        {params.id && (
           <button
-            className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48 mt-3 button-delete cursor-pointer"
-            onClick={async () => {
-              const accepted = window.confirm("¿Estás seguro?");
-              if (accepted) {
-                try {
-                  await deleteBox(params.id);
-                  toast.success("Caja eliminada", {
-                    position: "top-right",
-                    style: {
-                      background: "#101010",
-                      color: "#fff",
-                    },
-                  });
-                  navigate("/boxes"); // Solo si se elimina correctamente
-                } catch (error) {
-                  toast.error(error.message, {
-                    position: "top-right",
-                    style: {
-                      background: "#101010",
-                      color: "#fff",
-                    },
-                  });
-                }
-              }
-            }}
+            type="button"
+            className="bg-red-500 text-white p-3 rounded-lg w-full sm:w-48 button-delete cursor-pointer hover:bg-red-600"
+            onClick={() => setShowConfirm(true)}
           >
             Eliminar
           </button>
-        </div>
-      )}
+        )}
+      </div>
+
+      <ConfirmDelete
+        isOpen={showConfirm}
+        title="¿Estás seguro de eliminar esta caja?"
+        message="No podrás recuperar esta información."
+        onConfirm={async () => {
+          try {
+            await deleteBox(params.id);
+            toast.success("Caja eliminada");
+            navigate("/boxes");
+          } catch (error) {
+            toast.error(error.message);
+          }
+        }}
+        onCancel={() => setShowConfirm(false)}
+      />
     </div>
   );
 }
